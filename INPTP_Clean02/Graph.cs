@@ -34,39 +34,39 @@ namespace INPTP_Clean02.Graph
             vertexes.Add(node, n);
         }
 
-        public void AddUniEdge(E edge, N src, N dst)
+        public void AddUniEdge(E edge, N source, N destination)
         {
             Edge<N, E> e = new Edge<N, E>()
             {
                 data = edge
             };
 
-            Node<N, E> a1 = GetNode(src);
-            Node<N, E> a2 = GetNode(dst);
+            Node<N, E> a1 = GetNode(source);
+            Node<N, E> a2 = GetNode(destination);
 
-            e.adj1 = a1;
-            e.adj2 = a2;
+            e.source = a1;
+            e.destination = a2;
 
-            a1.adj.Add(e);
+            a1.neighbors.Add(e);
 
             edges.Add(edge, e);
         }
 
-        public void AddBiEdge(E edge, N src, N dst)
+        public void AddBiEdge(E edge, N source, N destination)
         {
             Edge<N, E> e = new Edge<N, E>()
             {
                 data = edge
             };
 
-            Node<N, E> a1 = GetNode(src);
-            Node<N, E> a2 = GetNode(dst);
+            Node<N, E> a1 = GetNode(source);
+            Node<N, E> a2 = GetNode(destination);
 
-            e.adj1 = a1;
-            e.adj2 = a2;
+            e.source = a1;
+            e.destination = a2;
 
-            a1.adj.Add(e);
-            a2.adj.Add(e);
+            a1.neighbors.Add(e);
+            a2.neighbors.Add(e);
 
             edges.Add(edge, e);
         }
@@ -76,27 +76,27 @@ namespace INPTP_Clean02.Graph
             Edge<N, E> e = GetEdge(edge);
             edges.Remove(edge);
 
-            e.adj1.adj.Remove(e);
-            e.adj2.adj.Remove(e);
+            e.source.neighbors.Remove(e);
+            e.destination.neighbors.Remove(e);
 
-            e.adj1 = e.adj2 = null;
+            e.source = e.destination = null;
         }
 
         public void RemoveEdge(Edge<N,E> edge)
         {
             edges.Remove(edge.data);
-            edge.adj1 = edge.adj2 = null;
+            edge.source = edge.destination = null;
         }
 
         public void RemoveNode(N node)
         {
             Node<N, E> n = GetNode(node);
 
-            foreach (var e in n.adj)
+            foreach (var e in n.neighbors)
             {
                 RemoveEdge(e);
-                Node<N, E> o = e.adj1 == n ? e.adj2 : e.adj1;
-                o.adj.Remove(e);
+                Node<N, E> o = e.source == n ? e.destination : e.source;
+                o.neighbors.Remove(e);
             }
         }
 
@@ -123,24 +123,24 @@ namespace INPTP_Clean02.Graph
 
     public class Node<N, E>
     {
-        public List<Edge<N, E>> adj;
+        public List<Edge<N, E>> neighbors;
         public N data;
 
         public Node()
         {
-            adj = new List<Edge<N, E>>();
+            neighbors = new List<Edge<N, E>>();
         }
     }
 
     public class Edge<N, E>
     {
-        public Node<N, E> adj1;
-        public Node<N, E> adj2;
+        public Node<N, E> source;
+        public Node<N, E> destination;
         public E data;
 
         public Node<N,E> Opposite(Node<N,E> n)
         {
-            return n == adj1 ? adj2 : adj1;
+            return n == source ? destination : source;
         }
 
     }
@@ -182,7 +182,7 @@ namespace INPTP_Clean02.Graph
 
                 finalized.Add(nmin);
 
-                foreach (var item in graph.GetNode(nmin).adj)
+                foreach (var item in graph.GetNode(nmin).neighbors)
                 {
                     Node<N, E> nn = item.Opposite(graph.GetNode(nmin));
 
