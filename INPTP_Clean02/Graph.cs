@@ -24,6 +24,10 @@ namespace INPTP_Clean02.Graph
         private Dictionary<N, Node<N, E>> vertexes = new Dictionary<N, Node<N, E>>();
         private Dictionary<E, Edge<N, E>> edges = new Dictionary<E, Edge<N, E>>();
 
+        /// <summary>
+        /// Method add node to graph
+        /// </summary>
+        /// <param name="node">Node to add</param>
         public void AddNode(N node)
         {
             Node<N, E> n = new Node<N, E>()
@@ -34,7 +38,13 @@ namespace INPTP_Clean02.Graph
             vertexes.Add(node, n);
         }
 
-        public void AddUniEdge(E edge, N source, N destination)
+        /// <summary>
+        /// Method add oriented edge to graph
+        /// </summary>
+        /// <param name="edge"></param>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        public void AddOrientedEdge(E edge, N source, N destination)
         {
             Edge<N, E> e = new Edge<N, E>()
             {
@@ -52,7 +62,13 @@ namespace INPTP_Clean02.Graph
             edges.Add(edge, e);
         }
 
-        public void AddBiEdge(E edge, N source, N destination)
+        /// <summary>
+        /// Method add unoriented edge to graph
+        /// </summary>
+        /// <param name="edge"></param>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        public void AddUnorientedEdge(E edge, N source, N destination)
         {
             Edge<N, E> e = new Edge<N, E>()
             {
@@ -71,6 +87,10 @@ namespace INPTP_Clean02.Graph
             edges.Add(edge, e);
         }
 
+        /// <summary>
+        /// Method remove edge from graph
+        /// </summary>
+        /// <param name="edge">edge to remove</param>
         public void RemoveEdge(E edge)
         {
             Edge<N, E> e = GetEdge(edge);
@@ -82,12 +102,20 @@ namespace INPTP_Clean02.Graph
             e.source = e.destination = null;
         }
 
+        /// <summary>
+        /// Method remove edge from graph
+        /// </summary>
+        /// <param name="edge">edge to remove</param>
         public void RemoveEdge(Edge<N,E> edge)
         {
             edges.Remove(edge.data);
             edge.source = edge.destination = null;
         }
 
+        /// <summary>
+        /// Method remove node from graph
+        /// </summary>
+        /// <param name="node">node to remove</param>
         public void RemoveNode(N node)
         {
             Node<N, E> n = GetNode(node);
@@ -100,21 +128,41 @@ namespace INPTP_Clean02.Graph
             }
         }
 
+        /// <summary>
+        /// Method return edge
+        /// </summary>
+        /// <param name="edge">Edge to get</param>
+        /// <returns>Edge</returns>
         internal Edge<N,E>GetEdge(E edge)
         {
             return edges[edge];
         }
 
+        /// <summary>
+        /// Method return node
+        /// </summary>
+        /// <param name="key">key of node</param>
+        /// <returns>Node</returns>
         internal Node<N,E> GetNode(N key)
         {
             return vertexes[key];
         }
 
+        /// <summary>
+        /// Method verifies that graph have node with key
+        /// </summary>
+        /// <param name="key">key of node</param>
+        /// <returns>true - graph have node, false - graph haven't node</returns>
         public bool HasNode(N key)
         {
             return vertexes.ContainsKey(key);
         }
 
+        /// <summary>
+        /// Method verifies that graph have edge with key
+        /// </summary>
+        /// <param name="key">key of edge</param>
+        /// <returns>true - graph have edge, false - graph haven't edge</returns>
         public bool HasEdge(E key)
         {
             return edges.ContainsKey(key);
