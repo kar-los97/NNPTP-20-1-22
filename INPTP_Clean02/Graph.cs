@@ -199,7 +199,7 @@ namespace INPTP_Clean02.Graph
      * TODO: code cleanup, create unit tests
      *
      */
-    public class Djkstra<N, E> where N : IComparable<N> where E : IComparable<E>
+    public class Dijkstra<N, E> where N : IComparable<N> where E : IComparable<E>
     {
         public Func<E, double> costExtractor;// func getWeightOfEdge(edge)
         public N start;
@@ -216,41 +216,41 @@ namespace INPTP_Clean02.Graph
 
             while (costs.Where(p =>!finalized.Contains(p.Key)).Count() != 0)
             {
-                double min = double.MaxValue;
-                N nmin = default(N);
+                double minimum = double.MaxValue;
+                N nodeMinimum = default(N);
 
                 foreach (var item in costs)
                 {
-                    if (!finalized.Contains(item.Key) && item.Value < min)
+                    if (!finalized.Contains(item.Key) && item.Value < minimum)
                     {
-                        nmin = item.Key;
-                        min = item.Value;
+                        nodeMinimum = item.Key;
+                        minimum = item.Value;
                     }
                 }
 
-                finalized.Add(nmin);
+                finalized.Add(nodeMinimum);
 
-                foreach (var item in graph.GetNode(nmin).neighbors)
+                foreach (var item in graph.GetNode(nodeMinimum).neighbors)
                 {
-                    Node<N, E> nn = item.Opposite(graph.GetNode(nmin));
+                    Node<N, E> nextNode = item.Opposite(graph.GetNode(nodeMinimum));
 
-                    if (finalized.Contains(nn.data))
+                    if (finalized.Contains(nextNode.data))
                         continue;
 
-                    double ncost = min + costExtractor(item.data);
+                    double nodeCost = minimum + costExtractor(item.data);
 
-                    if (costs.ContainsKey(nn.data))
+                    if (costs.ContainsKey(nextNode.data))
                     {
-                        double ocost = costs[nn.data];
-                        if (ncost < ocost)
+                        double ocost = costs[nextNode.data];
+                        if (nodeCost < ocost)
                         {
-                            costs[nn.data] = ncost;
-                            prev[nn.data] = nmin;
+                            costs[nextNode.data] = nodeCost;
+                            prev[nextNode.data] = nodeMinimum;
                         }
                     } else
                     {
-                        costs.Add(nn.data, ncost);
-                        prev[nn.data] = nmin;
+                        costs.Add(nextNode.data, nodeCost);
+                        prev[nextNode.data] = nodeMinimum;
                     }
                 }
             }
