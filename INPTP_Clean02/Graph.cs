@@ -24,7 +24,7 @@ namespace INPTP_Clean02.Graph
         private Dictionary<N, Node<N, E>> vertexes = new Dictionary<N, Node<N, E>>();
         private Dictionary<E, Edge<N, E>> edges = new Dictionary<E, Edge<N, E>>();
 
-        public void addNode(N node)
+        public void AddNode(N node)
         {
             Node<N, E> n = new Node<N, E>()
             {
@@ -41,8 +41,8 @@ namespace INPTP_Clean02.Graph
                 data = edge
             };
 
-            Node<N, E> a1 = getNode(src);
-            Node<N, E> a2 = getNode(dst);
+            Node<N, E> a1 = GetNode(src);
+            Node<N, E> a2 = GetNode(dst);
 
             e.adj1 = a1;
             e.adj2 = a2;
@@ -59,8 +59,8 @@ namespace INPTP_Clean02.Graph
                 data = edge
             };
 
-            Node<N, E> a1 = getNode(src);
-            Node<N, E> a2 = getNode(dst);
+            Node<N, E> a1 = GetNode(src);
+            Node<N, E> a2 = GetNode(dst);
 
             e.adj1 = a1;
             e.adj2 = a2;
@@ -71,9 +71,9 @@ namespace INPTP_Clean02.Graph
             edges.Add(edge, e);
         }
 
-        public void removeE(E edge)
+        public void RemoveEdge(E edge)
         {
-            Edge<N, E> e = getEdge(edge);
+            Edge<N, E> e = GetEdge(edge);
             edges.Remove(edge);
 
             e.adj1.adj.Remove(e);
@@ -82,30 +82,30 @@ namespace INPTP_Clean02.Graph
             e.adj1 = e.adj2 = null;
         }
 
-        public void removeE(Edge<N,E> edge)
+        public void RemoveEdge(Edge<N,E> edge)
         {
             edges.Remove(edge.data);
             edge.adj1 = edge.adj2 = null;
         }
 
-        public void removeNode(N node)
+        public void RemoveNode(N node)
         {
-            Node<N, E> n = getNode(node);
+            Node<N, E> n = GetNode(node);
 
             foreach (var e in n.adj)
             {
-                removeE(e);
+                RemoveEdge(e);
                 Node<N, E> o = e.adj1 == n ? e.adj2 : e.adj1;
                 o.adj.Remove(e);
             }
         }
 
-        internal Edge<N,E>getEdge(E edge)
+        internal Edge<N,E>GetEdge(E edge)
         {
             return edges[edge];
         }
 
-        internal Node<N,E> getNode(N key)
+        internal Node<N,E> GetNode(N key)
         {
             return vertexes[key];
         }
@@ -138,7 +138,7 @@ namespace INPTP_Clean02.Graph
         public Node<N, E> adj2;
         public E data;
 
-        public Node<N,E> opposite(Node<N,E> n)
+        public Node<N,E> Opposite(Node<N,E> n)
         {
             return n == adj1 ? adj2 : adj1;
         }
@@ -162,7 +162,7 @@ namespace INPTP_Clean02.Graph
         private Dictionary<N, double> costs = new Dictionary<N, double>();
         private Dictionary<N, N> prev = new Dictionary<N, N>();
 
-        public List<N> findRoute()
+        public List<N> FindRoute()
         {
             costs.Add(start, 0);
 
@@ -182,9 +182,9 @@ namespace INPTP_Clean02.Graph
 
                 finalized.Add(nmin);
 
-                foreach (var item in graph.getNode(nmin).adj)
+                foreach (var item in graph.GetNode(nmin).adj)
                 {
-                    Node<N, E> nn = item.opposite(graph.getNode(nmin));
+                    Node<N, E> nn = item.Opposite(graph.GetNode(nmin));
 
                     if (finalized.Contains(nn.data))
                         continue;
